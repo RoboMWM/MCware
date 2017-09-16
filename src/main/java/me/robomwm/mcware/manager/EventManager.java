@@ -1,4 +1,4 @@
-package me.robomwm.mcware;
+package me.robomwm.mcware.manager;
 
 import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
 import org.bukkit.World;
@@ -14,14 +14,17 @@ import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.hanging.HangingEvent;
 import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.event.vehicle.VehicleEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.WorldEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created on 9/16/2017.
@@ -30,19 +33,70 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * @author RoboMWM
  */
-public class MCwareEventThingy implements Listener
+public class EventManager implements Listener
 {
-    World MCWARE_WORLD;
+    private JavaPlugin instance;
+    private World MCWARE_WORLD;
 
-    public MCwareEventThingy(JavaPlugin plugin, World world)
+    private Set<Object> listeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
+    public EventManager(JavaPlugin plugin, World world)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        instance = plugin;
         MCWARE_WORLD = world;
+    }
+
+    /**
+     * Registers a class to listen to events applicable within the MCware world only
+     * @param classOfListeners
+     * @return
+     */
+    public void registerListeners(Object classOfListeners)
+    {
+        if (!(classOfListeners instanceof Listener))
+            return;
+        listeners.add(classOfListeners);
+    }
+
+    public boolean unregisterListeners(Object classOfListeners)
+    {
+        return listeners.remove(classOfListeners);
+    }
+
+    public void unregisterAllListeners()
+    {
+        listeners.clear();
     }
 
     private void callMCwareEventWhateverMajig(Event event)
     {
-        
+        for (EventPriority priority : EventPriority.values())
+        {
+            for (Object listenerClass : listeners)
+            {
+                for (Method listener : listenerClass.getClass().getMethods())
+                {
+                    if (!listener.isAnnotationPresent(EventHandler.class) //Has @EventHandler
+                            || listener.getAnnotation(EventHandler.class).priority() != priority //currently calling this priority
+                            || listener.getParameterCount() != 1 //Has only one input argument
+                            || !listener.getParameterTypes()[0].isAssignableFrom(event.getClass())) //event applies to this listener
+                        continue;
+
+                    listener.setAccessible(true); //In case it's private or w/e
+
+                    try
+                    {
+                        listener.invoke(listenerClass, event);
+                    }
+                    catch (Exception e)
+                    {
+                        instance.getLogger().severe(listenerClass.getClass().getName() + "Encountered an exception while attempting to handle " + event.getEventName());
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     //In case we want to expand on this - however, want to avoid teleporting across worlds - client takes time to load chunks and whatnot
