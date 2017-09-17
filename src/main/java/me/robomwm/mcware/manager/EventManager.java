@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
 import org.bukkit.World;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -81,6 +82,10 @@ public class EventManager implements Listener
                             || listener.getAnnotation(EventHandler.class).priority() != priority //currently calling this priority
                             || listener.getParameterCount() != 1 //Has only one input argument
                             || !listener.getParameterTypes()[0].isAssignableFrom(event.getClass())) //event applies to this listener
+                        continue;
+
+                    //Don't call if event is canceled, and listener doesn't care about canceled events
+                    if (event instanceof Cancellable && ((Cancellable)event).isCancelled() && listener.getAnnotation(EventHandler.class).ignoreCancelled())
                         continue;
 
                     listener.setAccessible(true); //In case it's private or w/e
