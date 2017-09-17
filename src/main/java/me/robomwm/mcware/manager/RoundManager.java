@@ -2,6 +2,7 @@ package me.robomwm.mcware.manager;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Created on 9/15/2017.
@@ -27,5 +28,15 @@ public class RoundManager implements Listener
     public RoundManager(JavaPlugin plugin)
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    public void endCurrentMicrogame()
+    {
+
+    }
+
+    public void startNextMicrogame()
+    {
+
     }
 }
