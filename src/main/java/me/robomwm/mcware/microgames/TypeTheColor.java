@@ -75,9 +75,9 @@ public class TypeTheColor implements Listener
         if (rightOrWrong.containsKey(event.getPlayer()))
             return;
 
-        String message = event.getMessage().toLowerCase();
+        String message = event.getMessage().toUpperCase();
 
-        if (message.equals(ChatColor.BLUE.name()))
+        if (message.equals(ChatColor.GREEN.name()))
         {
             rightOrWrong.put(event.getPlayer(), true);
             event.setCancelled(true);

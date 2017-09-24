@@ -32,13 +32,13 @@ public class MCware extends JavaPlugin
 
     public void onEnable()
     {
-        //load default microgames
-        new TypeTheColor(this);
-
         //Start timer, cuz yea idk
         timer();
 
         eventManager = new EventManager(this, getServer().getWorld("mcware"));
+
+        //load default microgames
+        new TypeTheColor(this);
 
         roundManager = new RoundManager(this);
 
@@ -59,7 +59,7 @@ public class MCware extends JavaPlugin
             {
                 for (RoundTask task : scheduledTasks.keySet())
                 {
-                    if (scheduledTasks.get(task) < System.currentTimeMillis())
+                    if (scheduledTasks.get(task) > System.currentTimeMillis())
                         continue;
                     scheduledTasks.remove(task);
                     switch(task)
