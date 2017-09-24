@@ -2,6 +2,7 @@ package me.robomwm.mcware;
 
 import me.robomwm.mcware.manager.EventManager;
 import me.robomwm.mcware.manager.RoundManager;
+import me.robomwm.mcware.microgames.Microgame;
 import me.robomwm.mcware.microgames.TypeTheColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,7 +23,7 @@ public class MCware extends JavaPlugin
 {
     private EventManager eventManager;
     private RoundManager roundManager;
-    private Set<TypeTheColor> microgames = new HashSet<>(); //TODO: generic microgame interface
+    private Set<Microgame> microgames = new HashSet<>(); //TODO: generic microgame interface
     private Map<RoundTask, Long> scheduledTasks = new HashMap<>();
 
     public EventManager getEventManager()
@@ -76,12 +77,12 @@ public class MCware extends JavaPlugin
         }.runTaskTimer(this, 1L, 1L);
     }
 
-    public void registerMicrogame(TypeTheColor game)
+    public void registerMicrogame(Microgame game)
     {
         microgames.add(game);
     }
 
-    public Set<TypeTheColor> getMicrogames()
+    public Set<Microgame> getMicrogames()
     {
         return new HashSet<>(microgames);
     }

@@ -2,7 +2,7 @@ package me.robomwm.mcware.manager;
 
 import me.robomwm.mcware.MCware;
 import me.robomwm.mcware.RoundTask;
-import me.robomwm.mcware.microgames.TypeTheColor;
+import me.robomwm.mcware.microgames.Microgame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +35,7 @@ import java.util.Set;
 public class RoundManager implements Listener
 {
     MCware instance;
-    TypeTheColor currentMicrogame;
+    Microgame currentMicrogame;
     Map<Player, Integer> points = new HashMap<>();
     int level = 0;
 
@@ -83,7 +83,7 @@ public class RoundManager implements Listener
     public void startNextMicrogame()
     {
         //TODO: determine next microgame
-        currentMicrogame = (TypeTheColor)instance.getMicrogames().toArray()[0];
+        currentMicrogame = (Microgame)instance.getMicrogames().toArray()[0];
 
         instance.scheduleTask(RoundTask.END_MICROGAME, 4000L);
         currentMicrogame.onGameStart(new HashSet<>(points.keySet()), 1);

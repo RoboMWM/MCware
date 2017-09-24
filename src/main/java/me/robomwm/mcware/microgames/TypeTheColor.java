@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @author RoboMWM
  */
-public class TypeTheColor implements Listener
+public class TypeTheColor implements Microgame, Listener
 {
     private MCware instance;
     private EventManager eventManager;
