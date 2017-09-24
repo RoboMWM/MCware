@@ -25,7 +25,8 @@ public class TypeTheColor implements Microgame, Listener
     private MCware instance;
     private EventManager eventManager;
     private Map<String, Double> settings = new HashMap<>();
-    private Map<Player, Boolean> rightOrWrong = new HashMap<>();
+
+    private Map<Player, Boolean> rightOrWrong;
 
     public TypeTheColor(MCware mCware)
     {
@@ -42,9 +43,13 @@ public class TypeTheColor implements Microgame, Listener
 
     public void onGameStart(Set<Player> players, double speed)
     {
+        //instantiate stuff
+        rightOrWrong = new HashMap<>();
+
         //Instruction
         for (Player player : players)
             player.sendTitle("Type the color!", ChatColor.GREEN + "Blue", 0, 100, 0);
+
         //Register listener
         eventManager.registerListeners(this, instance);
     }
@@ -61,6 +66,7 @@ public class TypeTheColor implements Microgame, Listener
 
         //cleanup
         rightOrWrong.clear();
+        rightOrWrong = null;
 
         return winners;
     }
