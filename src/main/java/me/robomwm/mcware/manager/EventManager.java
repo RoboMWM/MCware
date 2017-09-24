@@ -105,7 +105,7 @@ public class EventManager implements Listener
     }
 
     //In case we want to expand on this - however, want to avoid teleporting across worlds - client takes time to load chunks and whatnot
-    private boolean isMCWareWorld(World world)
+    public boolean isMCWareWorld(World world)
     {
         return world == MCWARE_WORLD;
     }

@@ -25,15 +25,23 @@ public class MCware extends JavaPlugin
     private Set<TypeTheColor> microgames = new HashSet<>(); //TODO: generic microgame interface
     private Map<RoundTask, Long> scheduledTasks = new HashMap<>();
 
+    public EventManager getEventManager()
+    {
+        return eventManager;
+    }
+
     public void onEnable()
     {
-        eventManager = new EventManager(this, getServer().getWorld("mcware"));
-
         //load default microgames
         new TypeTheColor(this);
 
         //Start timer, cuz yea idk
         timer();
+
+        eventManager = new EventManager(this, getServer().getWorld("mcware"));
+
+        roundManager = new RoundManager(this);
+
     }
 
     public void scheduleTask(RoundTask taskName, long delay)
@@ -42,7 +50,7 @@ public class MCware extends JavaPlugin
     }
 
     //Could put in its own class, idk right now
-    public void timer()
+    private void timer()
     {
         new BukkitRunnable()
         {
@@ -58,6 +66,9 @@ public class MCware extends JavaPlugin
                     {
                         case END_MICROGAME:
                             roundManager.endCurrentMicrogame();
+                            break;
+                        case START_MICROGAME:
+                            roundManager.startNextMicrogame();
                             break;
                     }
                 }

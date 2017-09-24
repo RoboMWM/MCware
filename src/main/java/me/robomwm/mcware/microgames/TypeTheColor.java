@@ -22,6 +22,7 @@ import java.util.Set;
  */
 public class TypeTheColor implements Listener
 {
+    private MCware instance;
     private Map<String, Double> settings = new HashMap<>();
     private Map<Player, Boolean> rightOrWrong = new HashMap<>();
 
@@ -36,16 +37,16 @@ public class TypeTheColor implements Listener
         return settings;
     }
 
-    public void onGameStart(EventManager eventManager, Set<Player> players, double speed)
+    public void onGameStart(Set<Player> players, double speed)
     {
         //Instruction
         for (Player player : players)
             player.sendTitle("Type the color!", ChatColor.GREEN + "Blue", 0, 100, 0);
         //Register listener
-        eventManager.registerListeners(this);
+        instance.getEventManager().registerListeners(this);
     }
 
-    public Set<Player> onGameEnd(EventManager eventManager)
+    public Set<Player> onGameEnd()
     {
         Set<Player> winners = new HashSet<>();
         for (Player player : rightOrWrong.keySet())
