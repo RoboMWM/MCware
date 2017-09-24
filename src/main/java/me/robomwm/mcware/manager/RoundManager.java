@@ -84,6 +84,7 @@ public class RoundManager implements Listener
     {
         //TODO: determine next microgame
         currentMicrogame = (TypeTheColor)instance.getMicrogames().toArray()[0];
+
         instance.scheduleTask(RoundTask.END_MICROGAME, 4000L);
         currentMicrogame.onGameStart(new HashSet<>(points.keySet()), 1);
     }

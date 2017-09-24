@@ -1,0 +1,4 @@
+name: MCware
+version: ${project.version}
+author: RoboMWM
+main: me.robomwm.mcware.MCware

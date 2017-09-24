@@ -23,11 +23,14 @@ import java.util.Set;
 public class TypeTheColor implements Listener
 {
     private MCware instance;
+    private EventManager eventManager;
     private Map<String, Double> settings = new HashMap<>();
     private Map<Player, Boolean> rightOrWrong = new HashMap<>();
 
     public TypeTheColor(MCware mCware)
     {
+        instance = mCware;
+        eventManager = mCware.getEventManager();
         mCware.registerMicrogame(this);
         settings.put("seconds", 4D);
     }
@@ -43,7 +46,7 @@ public class TypeTheColor implements Listener
         for (Player player : players)
             player.sendTitle("Type the color!", ChatColor.GREEN + "Blue", 0, 100, 0);
         //Register listener
-        instance.getEventManager().registerListeners(this);
+        eventManager.registerListeners(this, instance);
     }
 
     public Set<Player> onGameEnd()
@@ -65,6 +68,9 @@ public class TypeTheColor implements Listener
     @EventHandler
     private void onChat(AsyncPlayerChatEvent event)
     {
+        if (!eventManager.isMCWareWorld(event.getPlayer().getWorld()))
+            return;
+
         //Already attempted a guess
         if (rightOrWrong.containsKey(event.getPlayer()))
             return;
