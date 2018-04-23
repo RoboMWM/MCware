@@ -1,4 +1,4 @@
-package me.robomwm.mcware.manager;
+package me.robomwm.mcware.round;
 
 import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
 import org.bukkit.World;
@@ -56,7 +56,6 @@ public class EventManager implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         instance = plugin;
         MCWARE_WORLD = world;
-
     }
 
 //    /**
@@ -72,21 +71,20 @@ public class EventManager implements Listener
 //    }
 
     /**
-     * Note: You <b>must</b> check if player's world == isMCWareWorld
+     * Note: You <b>must</b> check if player is contained in the player's set that's passed to you on microgame start
+     * or if player's world == isMCWareWorld.
      * Because life is short and I don't have time to figure out how to listen to generic bukkit events without typing out each and every event.
      * (Getting all handlers won't work unless someone is listening to every event, and I'll figure out reflection later... or a PR!)
      * @param classOfListeners
      * @param plugin
      */
-    public void registerListeners(Listener classOfListeners, JavaPlugin plugin)
+    public void registerListeners(JavaPlugin plugin, Listener... classOfListeners)
     {
-        listeners.add(classOfListeners);
-        instance.getServer().getPluginManager().registerEvents(classOfListeners, plugin);
-    }
-
-    public boolean unregisterListeners(Object classOfListeners)
-    {
-        return listeners.remove(classOfListeners);
+        for (Listener listener : classOfListeners)
+        {
+            listeners.add(listener);
+            instance.getServer().getPluginManager().registerEvents(listener, plugin);
+        }
     }
 
     public void unregisterAllListeners()

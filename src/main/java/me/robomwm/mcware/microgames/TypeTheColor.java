@@ -1,7 +1,7 @@
 package me.robomwm.mcware.microgames;
 
 import me.robomwm.mcware.MCware;
-import me.robomwm.mcware.manager.EventManager;
+import me.robomwm.mcware.round.EventManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +23,6 @@ import java.util.Set;
 public class TypeTheColor implements Microgame, Listener
 {
     private MCware instance;
-    private EventManager eventManager;
     private Map<String, Double> settings = new HashMap<>();
 
     private Map<Player, Boolean> rightOrWrong;
@@ -31,7 +30,6 @@ public class TypeTheColor implements Microgame, Listener
     public TypeTheColor(MCware mCware)
     {
         instance = mCware;
-        eventManager = mCware.getEventManager();
         mCware.registerMicrogame(this);
         settings.put("seconds", 4D);
     }
@@ -41,7 +39,7 @@ public class TypeTheColor implements Microgame, Listener
         return settings;
     }
 
-    public void onGameStart(Set<Player> players, double speed)
+    public boolean start(Set<Player> players, EventManager eventManager)
     {
         //instantiate stuff
         rightOrWrong = new HashMap<>();
@@ -52,9 +50,10 @@ public class TypeTheColor implements Microgame, Listener
 
         //Register listener
         eventManager.registerListeners(this, instance);
+        return true;
     }
 
-    public Set<Player> onGameEnd()
+    public Set<Player> end()
     {
         Set<Player> winners = new HashSet<>();
         for (Player player : rightOrWrong.keySet())

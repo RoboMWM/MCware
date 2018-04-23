@@ -1,7 +1,11 @@
 package me.robomwm.mcware.microgames;
 
+import me.robomwm.mcware.round.EventManager;
+import me.robomwm.mcware.round.MicrogameDispatcher;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +19,11 @@ public interface Microgame
 {
     Map<String, Double> getSettings();
 
-    void onGameStart(Set<Player> players, double speed);
+    boolean start(Set<Player> players, double speed, EventManager eventManager);
 
-    Set<Player> onGameEnd();
+    /**
+     *
+     * @return players who won/should be awarded points
+     */
+    Collection<Player> end();
 }
