@@ -1,6 +1,6 @@
-package me.robomwm.mcware.round;
+package com.robomwm.mcware.round;
 
-import me.robomwm.mcware.microgames.Microgame;
+import com.robomwm.mcware.microgames.Microgame;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;

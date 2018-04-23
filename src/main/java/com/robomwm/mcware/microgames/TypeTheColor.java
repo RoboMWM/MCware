@@ -1,7 +1,7 @@
-package me.robomwm.mcware.microgames;
+package com.robomwm.mcware.microgames;
 
-import me.robomwm.mcware.MCware;
-import me.robomwm.mcware.round.EventManager;
+import com.robomwm.mcware.MCware;
+import com.robomwm.mcware.round.EventManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

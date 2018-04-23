@@ -1,8 +1,8 @@
-package me.robomwm.mcware;
+package com.robomwm.mcware;
 
-import me.robomwm.mcware.round.EventManager;
-import me.robomwm.mcware.microgames.Microgame;
-import me.robomwm.mcware.microgames.TypeTheColor;
+import com.robomwm.mcware.microgames.Microgame;
+import com.robomwm.mcware.microgames.TypeTheColor;
+import com.robomwm.mcware.round.EventManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;

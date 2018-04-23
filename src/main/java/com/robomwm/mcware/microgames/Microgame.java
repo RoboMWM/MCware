@@ -1,8 +1,6 @@
-package me.robomwm.mcware.microgames;
+package com.robomwm.mcware.microgames;
 
-import me.robomwm.mcware.round.EventManager;
-import me.robomwm.mcware.round.MicrogameDispatcher;
-import org.bukkit.World;
+import com.robomwm.mcware.round.EventManager;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;

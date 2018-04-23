@@ -1,4 +1,4 @@
-package me.robomwm.mcware.round;
+package com.robomwm.mcware.round;
 
 import com.destroystokyo.paper.event.entity.EntityPathfindEvent;
 import org.bukkit.World;
