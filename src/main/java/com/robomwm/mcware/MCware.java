@@ -3,6 +3,7 @@ package com.robomwm.mcware;
 import com.robomwm.mcware.microgames.Microgame;
 import com.robomwm.mcware.microgames.TypeTheColor;
 import com.robomwm.mcware.round.EventManager;
+import com.robomwm.mcware.round.MicrogameDispatcher;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
@@ -17,39 +18,14 @@ import java.util.Set;
  */
 public class MCware extends JavaPlugin
 {
-    private EventManager eventManager;
-    private RoundManager roundManager;
-    private Set<Microgame> microgames = new HashSet<>(); //TODO: generic microgame interface
-
-
-    public EventManager getEventManager()
-    {
-        return eventManager;
-    }
+    private Set<Microgame> microgames = new HashSet<>();
 
     public void onEnable()
     {
-        //Start timer, cuz yea idk
-        timer();
-
-        eventManager = new EventManager(this, getServer().getWorld("mcware"));
-
-        //load default microgames
+        //load bundled microgames
         new TypeTheColor(this);
 
-        roundManager = new RoundManager(this);
-
-    }
-
-    public void scheduleTask(RoundTask taskName, long delay)
-    {
-        scheduledTasks.put(taskName, System.currentTimeMillis() + delay);
-    }
-
-    //Could put in its own class, idk right now
-    private void timer()
-    {
-
+        new MicrogameDispatcher(this, getServer().getWorld("mcware"), microgames);
     }
 
     public void registerMicrogame(Microgame game)

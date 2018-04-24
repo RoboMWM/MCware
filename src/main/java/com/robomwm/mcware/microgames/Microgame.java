@@ -15,8 +15,12 @@ import java.util.Set;
  */
 public interface Microgame
 {
-    Map<String, Double> getSettings();
-
+    /**
+     *
+     * @param players
+     * @param speed
+     * @return Whether this microgame can be started (i.e. return false if not enough players, etc.)
+     */
     boolean start(Set<Player> players, double speed, EventManager eventManager);
 
     /**

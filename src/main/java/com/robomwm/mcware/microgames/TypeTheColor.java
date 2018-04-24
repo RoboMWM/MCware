@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,24 +23,17 @@ import java.util.Set;
  */
 public class TypeTheColor implements Microgame, Listener
 {
-    private MCware instance;
-    private Map<String, Double> settings = new HashMap<>();
+    private JavaPlugin plugin;
 
     private Map<Player, Boolean> rightOrWrong;
 
     public TypeTheColor(MCware mCware)
     {
-        instance = mCware;
+        plugin = mCware;
         mCware.registerMicrogame(this);
-        settings.put("seconds", 4D);
     }
 
-    public Map<String, Double> getSettings()
-    {
-        return settings;
-    }
-
-    public boolean start(Set<Player> players, EventManager eventManager)
+    public boolean start(Set<Player> players, double speed)
     {
         //instantiate stuff
         rightOrWrong = new HashMap<>();
@@ -49,7 +43,7 @@ public class TypeTheColor implements Microgame, Listener
             player.sendTitle("Type the color!", ChatColor.GREEN + "Blue", 0, 100, 0);
 
         //Register listener
-        eventManager.registerListeners(this, instance);
+        EventManager.registerListeners(plugin, this);
         return true;
     }
 
@@ -73,7 +67,7 @@ public class TypeTheColor implements Microgame, Listener
     @EventHandler
     private void onChat(AsyncPlayerChatEvent event)
     {
-        if (!eventManager.isMCWareWorld(event.getPlayer().getWorld()))
+        if (!EventManager.isPlayer(event.getPlayer()))
             return;
 
         //Already attempted a guess

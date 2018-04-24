@@ -3,9 +3,6 @@ package com.robomwm.mcware.round;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +19,7 @@ import java.util.Set;
  *
  * @author RoboMWM
  */
-public class ScoreboardWare implements Listener
+public class ScoreboardWare
 {
     private Map<Player, Integer> points = new HashMap<>();
     private World MCWARE_WORLD;
@@ -52,18 +49,35 @@ public class ScoreboardWare implements Listener
         }
     }
 
+    public void updatePlayers()
+    {
+        //Remove offline/players who left
+        for (Player player : points.keySet())
+        {
+            if (!player.isOnline() || !player.getServer().getOnlinePlayers().contains(player)
+                    || player.getWorld() != MCWARE_WORLD)
+                points.remove(player);
+        }
+
+        //Add players who joined
+        for (Player player : MCWARE_WORLD.getPlayers())
+        {
+            points.putIfAbsent(player, 0);
+        }
+    }
+
     public Set<Player> getPlayers()
     {
         return Collections.unmodifiableSet(points.keySet());
     }
 
-    //Leaves or joins game
-    @EventHandler
-    private void onPlayerJoin(PlayerChangedWorldEvent event)
+    public boolean isPlayer(Player player)
     {
-        if (event.getPlayer().getWorld() == MCWARE_WORLD)
-            points.putIfAbsent(event.getPlayer(), 0);
-        else if (event.getFrom() == MCWARE_WORLD)
-            points.remove(event.getPlayer());
+        //Check if online or in same world, remove if not so
+        if (!player.isOnline() || !player.getServer().getOnlinePlayers().contains(player)
+                || player.getWorld() != MCWARE_WORLD)
+            points.remove(player);
+
+        return points.containsKey(player);
     }
 }
