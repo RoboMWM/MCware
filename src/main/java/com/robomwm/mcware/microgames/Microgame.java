@@ -4,7 +4,6 @@ import com.robomwm.mcware.round.EventManager;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -13,7 +12,7 @@ import java.util.Set;
  *
  * @author RoboMWM
  */
-public interface Microgame
+public abstract class Microgame implements Cloneable
 {
     /**
      *
@@ -21,11 +20,23 @@ public interface Microgame
      * @param speed
      * @return Whether this microgame can be started (i.e. return false if not enough players, etc.)
      */
-    boolean start(Set<Player> players, double speed, EventManager eventManager);
+    public abstract boolean start(Set<Player> players, double speed, EventManager eventManager);
 
     /**
      *
      * @return players who won/should be awarded points
      */
-    Collection<Player> end();
+    public abstract Collection<Player> end();
+
+    public Microgame clone()
+    {
+        try
+        {
+            return (Microgame)super.clone();
+        }
+        catch (CloneNotSupportedException e)
+        {
+            throw new AssertionError();
+        }
+    }
 }

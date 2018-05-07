@@ -21,20 +21,14 @@ import java.util.Set;
  *
  * @author RoboMWM
  */
-public class TypeTheColor implements Microgame, Listener
+public class TypeTheColor extends Microgame implements Listener
 {
-    private JavaPlugin plugin;
-
     private Map<Player, Boolean> rightOrWrong;
+    private EventManager eventManager;
 
-    public TypeTheColor(MCware mCware)
+    public boolean start(Set<Player> players, double speed, EventManager eventManager)
     {
-        plugin = mCware;
-        mCware.registerMicrogame(this);
-    }
-
-    public boolean start(Set<Player> players, double speed)
-    {
+        this.eventManager = eventManager;
         //instantiate stuff
         rightOrWrong = new HashMap<>();
 
@@ -43,7 +37,7 @@ public class TypeTheColor implements Microgame, Listener
             player.sendTitle("Type the color!", ChatColor.GREEN + "Blue", 0, 100, 0);
 
         //Register listener
-        EventManager.registerListeners(plugin, this);
+        eventManager.registerListeners(this);
         return true;
     }
 
@@ -57,17 +51,13 @@ public class TypeTheColor implements Microgame, Listener
             winners.add(player);
         }
 
-        //cleanup
-        rightOrWrong.clear();
-        rightOrWrong = null;
-
         return winners;
     }
 
     @EventHandler
     private void onChat(AsyncPlayerChatEvent event)
     {
-        if (!EventManager.isPlayer(event.getPlayer()))
+        if (!eventManager.isPlayer(event.getPlayer()))
             return;
 
         //Already attempted a guess

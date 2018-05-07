@@ -23,7 +23,7 @@ public class MCware extends JavaPlugin
     public void onEnable()
     {
         //load bundled microgames
-        new TypeTheColor(this);
+        registerMicrogame(new TypeTheColor());
 
         new MicrogameDispatcher(this, getServer().getWorld("mcware"), microgames);
     }

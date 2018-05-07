@@ -1,5 +1,6 @@
 package com.robomwm.mcware.round;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -22,11 +23,13 @@ public class EventManager
     private ScoreboardWare scoreboardWare;
     private Set<Listener> listeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private World MCWARE_WORLD;
+    private JavaPlugin plugin;
 
-    public EventManager(World world, ScoreboardWare scoreboard)
+    public EventManager(World world, ScoreboardWare scoreboard, JavaPlugin plugin)
     {
         MCWARE_WORLD = world;
         scoreboardWare = scoreboard;
+        this.plugin = plugin;
     }
 
     //Convenience method
@@ -63,6 +66,17 @@ public class EventManager
             plugin.getServer().getPluginManager().registerEvents(listener, plugin);
         }
     }
+
+    /**
+     * @deprecated Should only be used by non-plugin-based addons (i.e. ones that don't extend JavaPlugin)
+     * @param classOfListeners
+     */
+    @Deprecated
+    public void registerListeners(Listener... classOfListeners)
+    {
+        registerListeners(plugin, classOfListeners);
+    }
+
 
     public void unregisterAllListeners()
     {

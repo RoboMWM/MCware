@@ -43,7 +43,7 @@ public class MicrogameDispatcher
     {
         this.plugin = plugin;
         scoreboard = new ScoreboardWare(mcwareWorld);
-        eventManager = new EventManager(mcwareWorld, scoreboard);
+        eventManager = new EventManager(mcwareWorld, scoreboard, plugin);
         this.microgames.addAll(microgames);
     }
 
@@ -82,6 +82,8 @@ public class MicrogameDispatcher
         {
             currentMicrogame = microgames.get(ThreadLocalRandom.current().nextInt(microgames.size()));
         }
+
+        currentMicrogame = currentMicrogame.clone();
 
         new BukkitRunnable()
         {
