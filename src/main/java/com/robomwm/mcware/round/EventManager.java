@@ -54,7 +54,9 @@ public class EventManager
     /**
      * Note: You <b>must</b> check result of isPlayer() or isMCwareWorld() in each listener.
      * Because life is short and I don't have time to figure out how to listen to generic bukkit events without typing out each and every event.
-     * (Getting all handlers won't work unless someone is listening to every event, and I'll figure out reflection later... or a PR!)
+     * (Getting all handlers won't work unless someone is listening to every event and I'll figure out reflection later...)
+     *
+     * I do want this to only fire events if the player is in the game/entity is in the designated world at some point soon though.
      * @param classOfListeners
      * @param plugin
      */
@@ -69,12 +71,14 @@ public class EventManager
 
     /**
      * @deprecated Should only be used by non-plugin-based addons (i.e. ones that don't extend JavaPlugin)
+     * Since the mechanism for loading such doesn't exist right now, this does absolutely nothing.
+     * So you shouldn't be using it!
      * @param classOfListeners
      */
     @Deprecated
     public void registerListeners(Listener... classOfListeners)
     {
-        registerListeners(plugin, classOfListeners);
+        //registerListeners(plugin, classOfListeners);
     }
 
 

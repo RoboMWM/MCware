@@ -23,8 +23,14 @@ import java.util.Set;
  */
 public class TypeTheColor extends Microgame implements Listener
 {
+    private JavaPlugin plugin;
     private Map<Player, Boolean> rightOrWrong;
     private EventManager eventManager;
+
+    public TypeTheColor(JavaPlugin plugin)
+    {
+        this.plugin = plugin;
+    }
 
     public boolean start(Set<Player> players, double speed, EventManager eventManager)
     {
