@@ -56,11 +56,16 @@ public class MicrogameDispatcher
     public void prepareForNextMicrogame()
     {
         if (++gamesPlayed % 4 == 0)
+        {
             speed += 0.1;
+            //queue speedup runnable
+            //return;
+        }
 
-        if (speed >= 1.7D)
+        if (speed >= 1.3D)
         {
             //TODO: boss game
+            scoreboard.printWinner();
             return;
         }
         new BukkitRunnable()

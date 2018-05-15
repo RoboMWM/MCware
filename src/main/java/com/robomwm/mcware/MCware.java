@@ -1,5 +1,6 @@
 package com.robomwm.mcware;
 
+import com.robomwm.mcware.command.StartRoundCommand;
 import com.robomwm.mcware.microgames.Microgame;
 import com.robomwm.mcware.microgames.TypeTheColor;
 import com.robomwm.mcware.round.EventManager;
@@ -25,7 +26,7 @@ public class MCware extends JavaPlugin
         //load bundled microgames
         registerMicrogame(new TypeTheColor(this));
 
-        new MicrogameDispatcher(this, getServer().getWorld("mcware"), microgames);
+        getCommand("mcware").setExecutor(new StartRoundCommand(this));
     }
 
     public void registerMicrogame(Microgame game)

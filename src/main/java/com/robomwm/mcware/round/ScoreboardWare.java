@@ -31,6 +31,20 @@ public class ScoreboardWare
             points.put(player, 0);
     }
 
+    public void printWinner()
+    {
+        //I briefly thought of creating a class instead of using a hashmap
+        //that implements comparable so they can be in a sorted list,
+        //but I only need to determine the winner at the end so yea.
+        Player winner = points.keySet().iterator().next();
+        for (Player player : points.keySet())
+            if (points.get(player) > points.get(winner))
+                winner = player;
+        //TODO: multi-winners support
+        for (Player player : MCWARE_WORLD.getPlayers())
+            player.sendMessage(player.getName() + " won with " + points.get(player));
+    }
+
     public void addPoints(int amount, Collection<Player> winners)
     {
         for (Player player : points.keySet())
@@ -54,9 +68,7 @@ public class ScoreboardWare
         //Remove offline/players who left
         for (Player player : points.keySet())
         {
-            if (!player.isOnline() || !player.getServer().getOnlinePlayers().contains(player)
-                    || player.getWorld() != MCWARE_WORLD)
-                points.remove(player);
+            isPlayer(player);
         }
 
         //Add players who joined
