@@ -144,7 +144,7 @@ public class MicrogameDispatcher
 
         int stage = 0;
         int direction = 0;
-        int distance = 0;
+        int distance = 2;
         for (Player player : scoreboard.getPlayers())
         {
             if (stage % (distance * 2) == 0) //corner
