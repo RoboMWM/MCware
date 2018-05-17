@@ -45,6 +45,7 @@ public class MicrogameDispatcher
         scoreboard = new ScoreboardWare(mcwareWorld);
         eventManager = new EventManager(mcwareWorld, scoreboard, plugin);
         this.microgames.addAll(microgames);
+        prepareForNextMicrogame();
     }
 
     public void terminate()
