@@ -2,3 +2,5 @@ name: MCware
 version: ${project.version}
 author: RoboMWM
 main: com.robomwm.mcware.MCware
+commands:
+   mcware: {}

@@ -2,6 +2,7 @@ package com.robomwm.mcware;
 
 import com.robomwm.mcware.command.StartRoundCommand;
 import com.robomwm.mcware.microgames.Microgame;
+import com.robomwm.mcware.microgames.QuickMath;
 import com.robomwm.mcware.microgames.TypeTheColor;
 import com.robomwm.mcware.round.EventManager;
 import com.robomwm.mcware.round.MicrogameDispatcher;
@@ -25,6 +26,7 @@ public class MCware extends JavaPlugin
     {
         //load bundled microgames
         registerMicrogame(new TypeTheColor(this));
+        registerMicrogame(new QuickMath(this));
 
         getCommand("mcware").setExecutor(new StartRoundCommand(this));
     }
