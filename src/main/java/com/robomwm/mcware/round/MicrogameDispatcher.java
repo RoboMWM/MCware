@@ -59,6 +59,7 @@ public class MicrogameDispatcher
         if (++gamesPlayed % 4 == 0)
         {
             speed += 0.1;
+            plugin.getLogger().info(Double.toString(speed));
             //queue speedup runnable
             //return;
         }

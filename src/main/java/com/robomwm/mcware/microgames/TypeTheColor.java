@@ -44,6 +44,8 @@ public class TypeTheColor extends Microgame implements Listener
             {
                 case GOLD:
                 case GRAY:
+                case AQUA:
+                case LIGHT_PURPLE:
                     continue;
             }
             if (color.isColor() && !color.name().contains("DARK"))

@@ -39,21 +39,21 @@ public class QuickMath extends Microgame implements Listener
         this.eventManager = eventManager;
         eventManager.registerListeners(plugin, this);
 
-        int first = ThreadLocalRandom.current().nextInt(30);
-        int second = ThreadLocalRandom.current().nextInt(20);
+        int first = ThreadLocalRandom.current().nextInt(12);
+        int second = ThreadLocalRandom.current().nextInt(12);
         add = ThreadLocalRandom.current().nextBoolean();
         if (add)
             result = first + second;
         else
-            result = first - second;
+            result = first * second;
 
-        String operator = "-";
+        String operator = " - ";
         if (add)
-            operator = "+";
+            operator = " * ";
 
 
         for (Player player : players)
-            player.sendTitle("Quick Maths", Integer.toString(first) + " " + operator + " " + second + " = ?", 0, 100, 0);
+            player.sendTitle("", Integer.toString(first) + operator + second + " = ?", 0, 100, 0);
 
         return true;
     }
