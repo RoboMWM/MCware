@@ -61,7 +61,7 @@ public class MicrogameDispatcher
     {
         if (++gamesPlayed % 4 == 0)
         {
-            speed += 0.1;
+            speed += 0.1D;
             plugin.getLogger().info(Double.toString(speed));
             //TODO: play speedup sound
             //TODO: print score

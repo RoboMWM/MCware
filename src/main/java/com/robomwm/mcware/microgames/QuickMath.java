@@ -47,9 +47,9 @@ public class QuickMath extends Microgame implements Listener
         else
             result = first * second;
 
-        String operator = " - ";
+        String operator = " * ";
         if (add)
-            operator = " * ";
+            operator = " + ";
 
 
         for (Player player : players)
