@@ -8,6 +8,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,7 @@ public class QuickMath extends Microgame implements Listener
     @Override
     public boolean start(Set<Player> players, double speed, EventManager eventManager)
     {
+        rightOrWrong = new HashMap<>();
         this.eventManager = eventManager;
         eventManager.registerListeners(plugin, this);
 
