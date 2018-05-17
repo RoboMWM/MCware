@@ -1,6 +1,7 @@
 package com.robomwm.mcware.round;
 
 import com.robomwm.mcware.microgames.Microgame;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,6 +34,7 @@ public class MicrogameDispatcher
 {
     private JavaPlugin plugin;
     private List<Microgame> microgames = new ArrayList<>();
+    private World world;
     private Microgame currentMicrogame;
     private ScoreboardWare scoreboard;
     private EventManager eventManager;
@@ -42,6 +44,7 @@ public class MicrogameDispatcher
     public MicrogameDispatcher(JavaPlugin plugin, World mcwareWorld, Collection<Microgame> microgames)
     {
         this.plugin = plugin;
+        this.world = mcwareWorld;
         scoreboard = new ScoreboardWare(mcwareWorld);
         eventManager = new EventManager(mcwareWorld, scoreboard, plugin);
         this.microgames.addAll(microgames);
@@ -60,8 +63,19 @@ public class MicrogameDispatcher
         {
             speed += 0.1;
             plugin.getLogger().info(Double.toString(speed));
-            //queue speedup runnable
-            //return;
+            //TODO: play speedup sound
+            //TODO: print score
+            for (Player player : scoreboard.getPlayers())
+                player.sendTitle("Speed up!", "debug: " + speed, 0, (int)(100 / speed), 0);
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    startNextMicrogame(speed);
+                }
+            }.runTaskLater(plugin, (long)(100 / speed));
+            return;
         }
 
         if (speed >= 1.3D)
@@ -113,7 +127,7 @@ public class MicrogameDispatcher
                     }
                 }
 
-                if (--ticksRemaining < 0)
+                if (--ticksRemaining <= 0)
                 {
                     endCurrentMicrogame();
                     cancel();
@@ -126,10 +140,45 @@ public class MicrogameDispatcher
     {
         eventManager.unregisterAllListeners();
         scoreboard.addPoints(1, currentMicrogame.end());
+        Location location = world.getSpawnLocation();
 
-        //TODO: Stop music
-
-        //TODO: teleport players to main platform
+        int stage = 0;
+        int direction = 0;
+        int distance = 0;
+        for (Player player : scoreboard.getPlayers())
+        {
+            if (stage % (distance * 2) == 0) //corner
+            {
+                if (stage >= distance * 8) //done with this radius
+                {
+                    distance -= 2;
+                    stage = 0;
+                    direction = 0;
+                    location.add(0, 0, distance);
+                    return;
+                }
+                direction++;
+            }
+            switch(direction)
+            {
+                case 1:
+                    player.teleport(location.add(0, 0, -2));
+                    break;
+                case 2:
+                    player.teleport(location.add(-2, 0, 0));
+                    break;
+                case 3:
+                    player.teleport(location.add(0, 0, 2));
+                    break;
+                case 4:
+                    player.teleport(location.add(2, 0, 0));
+                    break;
+                default:
+                    player.teleport(world.getSpawnLocation());
+                    plugin.getLogger().warning("Player unable to be teleported properly, something wrong in the \"spiral\" logic!");
+            }
+            stage++;
+        }
 
         new BukkitRunnable()
         {

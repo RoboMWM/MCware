@@ -1,5 +1,6 @@
 package com.robomwm.mcware.round;
 
+import org.bukkit.ChatColor;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -49,15 +50,16 @@ public class ScoreboardWare
     {
         for (Player player : points.keySet())
         {
+            player.stopSound("");
             if (winners.contains(player))
             {
                 points.put(player, points.get(player) + amount);
-                player.sendTitle("You Won!", "", 0, 40, 0);
+                player.sendTitle(ChatColor.DARK_GREEN + "You Won!", "", 0, 40, 0);
                 player.playSound(player.getLocation(), "mcware.win", SoundCategory.BLOCKS, 3000000f, 1.0f);
             }
             else
             {
-                player.sendTitle("You Failed...!", "", 0, 40, 0);
+                player.sendTitle(ChatColor.DARK_RED + "You Failed...!", "", 0, 40, 0);
                 player.playSound(player.getLocation(), "mcware.fail", SoundCategory.BLOCKS, 3000000f, 1.0f);
             }
         }
@@ -80,6 +82,8 @@ public class ScoreboardWare
 
     public Set<Player> getPlayers()
     {
+        for (Player player : points.keySet())
+            isPlayer(player);
         return Collections.unmodifiableSet(points.keySet());
     }
 
