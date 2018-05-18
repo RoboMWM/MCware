@@ -43,7 +43,7 @@ public class ScoreboardWare
                 winner = player;
         //TODO: multi-winners support
         for (Player player : MCWARE_WORLD.getPlayers())
-            player.sendMessage(player.getName() + " won with " + points.get(player));
+            player.sendMessage(winner.getName() + " won with " + points.get(winner));
     }
 
     public void addPoints(int amount, Collection<Player> winners)

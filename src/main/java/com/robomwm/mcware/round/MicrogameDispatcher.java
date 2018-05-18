@@ -78,7 +78,7 @@ public class MicrogameDispatcher
             return;
         }
 
-        if (speed >= 1.3D)
+        if (speed > 1.3D)
         {
             //TODO: boss game
             scoreboard.printWinner();
