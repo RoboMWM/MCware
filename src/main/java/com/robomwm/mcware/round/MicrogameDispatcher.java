@@ -1,10 +1,13 @@
 package com.robomwm.mcware.round;
 
 import com.robomwm.mcware.microgames.Microgame;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -96,6 +99,8 @@ public class MicrogameDispatcher
 
     public void startNextMicrogame(double speed)
     {
+        if (scoreboard.getPlayers().isEmpty())
+            return;
         scoreboard.updatePlayers();
         currentMicrogame = microgames.get(ThreadLocalRandom.current().nextInt(microgames.size()));
 
@@ -141,12 +146,21 @@ public class MicrogameDispatcher
         eventManager.unregisterAllListeners();
         scoreboard.addPoints(1, currentMicrogame.end());
         Location location = world.getSpawnLocation();
+        world.setPVP(false);
 
         int stage = 0;
         int direction = 0;
         int distance = 2;
         for (Player player : scoreboard.getPlayers())
         {
+            player.spigot().respawn();
+            player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+            player.setGameMode(GameMode.ADVENTURE);
+            player.setFlySpeed(0.1f);
+            player.setWalkSpeed(0.2f);
+            for (PotionEffect potionEffect : player.getActivePotionEffects())
+                player.removePotionEffect(potionEffect.getType());
+
             if (stage % (distance * 2) == 0) //corner
             {
                 if (stage >= distance * 8) //done with this radius
