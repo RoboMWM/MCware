@@ -155,7 +155,6 @@ public class MicrogameDispatcher
         {
             player.spigot().respawn();
             player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-            player.setGameMode(GameMode.ADVENTURE);
             player.setFlySpeed(0.1f);
             player.setWalkSpeed(0.2f);
             for (PotionEffect potionEffect : player.getActivePotionEffects())
@@ -192,6 +191,7 @@ public class MicrogameDispatcher
                     plugin.getLogger().warning("Player unable to be teleported properly, something wrong in the \"spiral\" logic!");
             }
             stage++;
+            player.setGameMode(GameMode.ADVENTURE);
         }
 
         new BukkitRunnable()
