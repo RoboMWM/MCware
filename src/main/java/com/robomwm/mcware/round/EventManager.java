@@ -198,7 +198,6 @@ public class EventManager
                 plugin.getLogger().severe(eventHandler.getName() + " Encountered an exception while attempting to handle " + event.getEventName());
                 e.printStackTrace();
             }
-            }
         }
     }
 }
