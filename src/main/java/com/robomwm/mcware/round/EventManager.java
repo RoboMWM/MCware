@@ -1,13 +1,10 @@
 package com.robomwm.mcware.round;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockEvent;
@@ -18,7 +15,6 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.event.vehicle.VehicleEvent;
 import org.bukkit.event.weather.WeatherEvent;
 import org.bukkit.event.world.WorldEvent;
@@ -51,7 +47,7 @@ public class EventManager
         this.plugin = plugin;
     }
 
-    //Convenience method
+    //Convenience eventHandler
     public boolean isPlayer(Player player)
     {
         return scoreboardWare.isPlayer(player);
@@ -87,19 +83,19 @@ public class EventManager
         for (Listener listenerClass : listeners)
         {
             listeners.add(listenerClass);
-            for (Method listener : listenerClass.getClass().getMethods())
+            for (Method eventHandler : listenerClass.getClass().getMethods())
             {
-                if (!listener.isAnnotationPresent(EventHandler.class) //Has @EventHandler
-                        || listener.getParameterCount() != 1 //Has only one input argument
-                        || !listener.getParameterTypes()[0].isAssignableFrom(Event.class)) //is listening to an event
+                if (!eventHandler.isAnnotationPresent(EventHandler.class) //Has @EventHandler
+                        || eventHandler.getParameterCount() != 1 //Has only one input argument
+                        || !eventHandler.getParameterTypes()[0].isAssignableFrom(Event.class)) //is listening to an event
                     continue;
 
-                listener.setAccessible(true); //In case it's private or w/e
+                eventHandler.setAccessible(true); //In case it's private or w/e
 
-                plugin.getServer().getPluginManager().registerEvent((Class<? extends Event>)listener.getParameterTypes()[0],
-                        listenerClass, //uuuuuhhhhhhhhhhmmmmmmmmmmm
-                        listener.getAnnotation(EventHandler.class).priority(),
-                        new MCWareEventExecutor(), plugin, listener.getAnnotation(EventHandler.class).ignoreCancelled());
+                plugin.getServer().getPluginManager().registerEvent((Class<? extends Event>)eventHandler.getParameterTypes()[0],
+                        listenerClass,
+                        eventHandler.getAnnotation(EventHandler.class).priority(),
+                        new MCWareEventExecutor(eventHandler), plugin, eventHandler.getAnnotation(EventHandler.class).ignoreCancelled());
             }
         }
     }
@@ -126,8 +122,15 @@ public class EventManager
 
     class MCWareEventExecutor implements EventExecutor
     {
+        private Method eventHandler;
+
+        MCWareEventExecutor(Method eventHandler)
+        {
+            this.eventHandler = eventHandler;
+        }
+
         @Override
-        public void execute(Listener listenerClass, Event event) throws EventException
+        public void execute(Listener listener, Event event) throws EventException
         {
             if (event instanceof BlockEvent)
             {
@@ -185,27 +188,16 @@ public class EventManager
                 if (((WorldEvent) event).getWorld() != MCWARE_WORLD)
                     return;
             }
-            for (Method listener : listenerClass.getClass().getMethods())
+
+            try
             {
-                if (!listener.isAnnotationPresent(EventHandler.class) //Has @EventHandler
-                        || !listener.getParameterTypes()[0].isAssignableFrom(event.getClass())) //event applies to this listener
-                    continue;
-
-                //Don't call if event is canceled, and listener doesn't care about canceled events
-                if (event instanceof Cancellable && ((Cancellable)event).isCancelled() && listener.getAnnotation(EventHandler.class).ignoreCancelled())
-                    continue;
-
-                listener.setAccessible(true); //In case it's private or w/e
-
-                try
-                {
-                    listener.invoke(listenerClass, event);
-                }
-                catch (Exception e)
-                {
-                    plugin.getLogger().severe(listenerClass.getClass().getName() + " Encountered an exception while attempting to handle " + event.getEventName());
-                    e.printStackTrace();
-                }
+                this.eventHandler.invoke(listener, event);
+            }
+            catch (Exception e)
+            {
+                plugin.getLogger().severe(eventHandler.getName() + " Encountered an exception while attempting to handle " + event.getEventName());
+                e.printStackTrace();
+            }
             }
         }
     }
