@@ -44,7 +44,7 @@ public class SimonSays extends Microgame
 
         this.eventManager = eventManager;
 
-        switch(instruction)
+        switch(simonAction)
         {
 
         }
